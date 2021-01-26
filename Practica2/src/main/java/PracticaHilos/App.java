@@ -7,41 +7,31 @@ import com.sun.tools.javac.util.List;
 public class App {
 
 	public static void main(String[] args) {
-		 TaskManager tm = new TaskManager(new ArrayList<Integer>(10));
-		 Productor productor = new Productor(tm, 1);
-		 Consumidor consumidor = new Consumidor(tm, 1);
-		
-		 for (int i=0;i<10;i++) {
-			Thread hp = new Thread(productor);
-			hp.start();
-//			try {
-//				hp.join();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+		TaskManager tm = new TaskManager(new ArrayList<Integer>(10));
+		Productor productor = new Productor(tm, 1);
+		Consumidor consumidor = new Consumidor(tm, 1);
+		ArrayList<Thread> threads = new ArrayList<Thread>();
+		for (int i = 0; i < 10; i++) {
+			threads.add(new Thread(productor));
 		}
-		 
-		 for(int i=0;i<10;i++) {
-			 Thread hc = new Thread(consumidor);
-			 hc.start();
-			
-//			 try {
-//				hc.join();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-		 }
-		 
-		 
-		 
-//		 Thread p = new Thread(productor);
-//		 Thread c = new Thread(consumidor);
-//		 p.start();
-//		 c.start();
-		
-		
+
+		for (int i = 0; i < 10; i++) {
+			threads.add(new Thread(consumidor));
+		}
+
+		for (Thread t : threads) {
+			t.start();
+
+		}
+		for (Thread t : threads) {
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				System.out.println("NO SE HAN FINALIZADO LOS HILOS");
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 }
